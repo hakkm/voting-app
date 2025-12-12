@@ -20,7 +20,8 @@ pipeline {
                 // This looks for a SonarQube server configured in Jenkins
                 // we name the server "sonar" in Jenkins settings
                 withSonarQubeEnv('sonar') {
-                    sh 'mvn sonar:sonar'
+                    //sh 'mvn sonar:sonar'
+					sh 'mvn sonar:sonar -Dsonar.host.url=http://sonarqube:9000'
                 }
             }
         }
