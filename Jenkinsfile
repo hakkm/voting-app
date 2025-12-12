@@ -11,7 +11,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 // This runs the tests and generates the JaCoCo report
-                sh 'mvn clean package sonar:sonar'
+                sh 'mvn clean package'
             }
         }
 
