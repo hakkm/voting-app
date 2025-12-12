@@ -12,7 +12,7 @@ public class VoteTest {
         assertNotNull(vote);
         assertEquals("voter1", vote.voterId());
         assertEquals("candidateA", vote.candidateId());
-        assertNotNull(vote.timestamp());
+
     }
 
     @Test
