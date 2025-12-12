@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  sonarqube:
+    image: sonarqube:lts-community
+    ports:
+      - "9000:9000"
+    networks:
+      - devops-net
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+
+  jenkins:
+    image: jenkins/jenkins:lts
+    ports:
+      - "8080:8080"
+      - "50000:50000"
+    networks:
+      - devops-net
+    environment:
+      - DOCKER_HOST=tcp://docker:2376
+      - DOCKER_CERT_PATH=/certs/client
+      - DOCKER_TLS_VERIFY=1
+    volumes:
+      - jenkins_home:/var/jenkins_home
+      # This allows Jenkins to use your laptop's Docker to run builds
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  devops-net:
+
+volumes:
+  jenkins_home:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
