@@ -1,6 +1,6 @@
 # Projet d’Intégration Continue : Refactoring & Pipeline DevOps
 
-École : ENSA Marrakech
+École : ENSA-M Marrakech
 Module : Ingénierie Logicielle
 Filière : Génie Informatique
 
