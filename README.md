@@ -11,7 +11,7 @@ Ce projet consiste à transformer une application de vote monolithique en une so
 ## 2. Architecture et Design Patterns
 
 ### Architecture globale (Diagramme de classes)
-<img width="2074" height="1842" alt="image" src="https://github.com/user-attachments/assets/4d6e2c44-cab7-4872-af0f-2d5b8717513f" />
+![Diagramme de classes](./docs/diag_class_vote_app.jpg)
 
 ### Justification des choix techniques
 
@@ -65,8 +65,7 @@ graph LR
 * Ciblage des classes critiques : services et stratégies.
 * Objectif : > 60% de couverture.
 
-<img width="1867" height="543" alt="image" src="https://github.com/user-attachments/assets/964924e5-f92d-44c9-a1a6-19b1fe87c6b5" />
-
+![Couverture JaCoCo](./docs/jacoco_coverage.png)
 
 ### B. Analyse statique (SonarQube)
 
@@ -76,14 +75,12 @@ graph LR
 
 <img width="1450" height="926" alt="image" src="https://github.com/user-attachments/assets/cbfbcd98-2b47-437a-922d-4370b78007c8" />
 
-
 ### C. Exécution du pipeline (Jenkins)
 
 * Pipeline multibranche fonctionnel.
 * Toutes les étapes validées.
 
 <img width="1834" height="804" alt="image" src="https://github.com/user-attachments/assets/07cb67dd-477c-4f52-878b-7eae23b67ea5" />
-
 
 ## 6. Retour d’expérience
 
@@ -187,3 +184,60 @@ target/site/jacoco/index.html
 ```bash
 java -jar target/vote-1.0-SNAPSHOT.jar
 ```
+
+---
+
+## 8. API REST (ajout sans modifier la structure)
+
+Endpoints principaux (Spring Boot 3.2.1, Java 21) :
+- POST `/api/votes` : créer un vote `{voter, candidate}`
+- GET `/api/votes` : lister les votes
+- GET `/api/votes/results?strategy=plurality|twoRoundRunoff|borda|approval` : résultats par stratégie
+- DELETE `/api/votes` : purger les votes
+
+Documentation complète : [docs/API.md](docs/API.md).
+
+## 9. Démarrage rapide (API)
+
+### Mode dev
+```bash
+mvn spring-boot:run
+```
+- API : http://localhost:8080/api/votes
+- H2 console (dev) : http://localhost:8080/h2-console
+
+### Tests
+```bash
+mvn test
+```
+Rapports : `target/site/jacoco/index.html` (couverture), rapports JUnit/XML.
+
+### Docker (application seule)
+```bash
+docker build -t voting-app .
+docker run -p 8080:8080 voting-app
+```
+
+### Stack complète (app + PostgreSQL + CI)
+```bash
+docker compose up -d
+```
+Services :
+- App : http://localhost:8080
+- PostgreSQL : localhost:5432
+- Jenkins : http://localhost:8081
+- SonarQube : http://localhost:9000
+
+## 10. CI/CD (Jenkinsfile)
+Étapes : Build → Tests → JaCoCo → SonarQube → Quality Gate → OWASP/Dependency Check → Docker Build → Push → Deploy. Post-actions : publication des rapports, nettoyage workspace.
+
+## 11. Structure du dépôt
+- `src/main/java/...` : contrôleur, service, stratégies, repository, observer
+- `src/test/java/...` : tests unitaires et intégration
+- `docs/API.md` : documentation détaillée des endpoints
+
+## 12. Commandes utiles
+- Lancer l’appli : `mvn spring-boot:run`
+- Exécuter les tests : `mvn test`
+- Construire l’image : `docker build -t voting-app .`
+- Stack complète : `docker compose up -d`
