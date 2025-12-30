@@ -1,51 +1,45 @@
 package org.example;
 
-
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 import org.example.factory.RepositoryFactory;
-import org.example.model.Vote;
 import org.example.observer.LoggingVoteListener;
 import org.example.repository.VoteRepository;
 import org.example.service.VoteService;
-import org.example.strategy.PluralityCountingStrategy;
 
-import java.util.Scanner;
-
+/**
+ * Spring Boot Application for Voting System.
+ * 
+ * This application provides both:
+ * - REST API for vote management (http://localhost:8080/api/votes)
+ * - Swagger UI documentation (http://localhost:8080/swagger-ui.html)
+ */
+@SpringBootApplication
 public class App {
+
     public static void main(String[] args) {
-        // 1. Setup via Factory
-        VoteRepository repo = RepositoryFactory.createRepo("memory");
+        SpringApplication.run(App.class, args);
+    }
 
-        // 2. Init Service and Observers
+    /**
+     * Create VoteRepository bean using factory pattern.
+     * Configuration can be externalized via application.properties
+     */
+    @Bean
+    public VoteRepository voteRepository() {
+        return RepositoryFactory.createRepo("memory");
+    }
+
+    /**
+     * Create VoteService bean with repository dependency injection.
+     */
+    @Bean
+    public VoteService voteService(VoteRepository repo) {
         VoteService service = new VoteService(repo);
+        // Add logging listener for vote events
         service.addListener(new LoggingVoteListener());
-
-        Scanner sc = new Scanner(System.in);
-        System.out.println("--- Refactored Voting App ---");
-        System.out.println("Commands: vote, count, exit");
-
-        while (true) {
-            System.out.print("> ");
-            String cmd = sc.nextLine().trim();
-
-            if ("exit".equalsIgnoreCase(cmd)) break;
-
-            if ("vote".equalsIgnoreCase(cmd)) {
-                System.out.print("Voter Name: ");
-                String voter = sc.nextLine();
-                System.out.print("Candidate Name: ");
-                String candidate = sc.nextLine();
-
-                Vote v = new Vote(voter, candidate, System.currentTimeMillis());
-                service.cast(v);
-                System.out.println("Vote recorded.");
-            }
-            else if ("count".equalsIgnoreCase(cmd)) {
-                var results = service.count(new PluralityCountingStrategy());
-                System.out.println("Results: " + results);
-            }
-            else {
-                System.out.println("Unknown command. Try harder.");
-            }
-        }
+        return service;
     }
 }
+
