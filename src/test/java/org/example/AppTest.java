@@ -8,7 +8,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class AppTest {
 
@@ -90,6 +89,6 @@ public class AppTest {
         String output = outContent.toString();
         // Check if the application exited cleanly without further output after 'exit'
         // This implicitly means the loop was broken.
-        assertTrue(outContent.toString().trim().endsWith(">"));
+        assertTrue(output.trim().endsWith(">"));
     }
 }
