@@ -1,7 +1,6 @@
-package org.example.vote.repo;
+package org.example.repository;
 
 import org.example.model.Vote;
-import org.example.repository.VoteRepository;
 import java.util.*;
 
 public class InMemoryVoteRepository implements VoteRepository {

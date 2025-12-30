@@ -1,7 +1,6 @@
 package org.example.repository;
 
 import org.example.model.Vote;
-import org.example.vote.repo.InMemoryVoteRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;

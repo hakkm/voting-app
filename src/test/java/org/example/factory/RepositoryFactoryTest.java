@@ -1,7 +1,7 @@
 package org.example.factory;
 
 import org.example.repository.VoteRepository;
-import org.example.vote.repo.InMemoryVoteRepository;
+import org.example.repository.InMemoryVoteRepository;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertThrows;
